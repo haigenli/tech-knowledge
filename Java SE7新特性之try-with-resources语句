@@ -1,4 +1,6 @@
-try-with-resources语句是一个声明一个或多个资源的 try 语句。一个资源作为一个对象，必须在程序结束之后随之关闭。 try-with-resources语句确保在语句的最后每个资源都被关闭 。任何实现了 Java.lang.AutoCloseable的对象, 包括所有实现了 java.io.Closeable 的对象, 都可以用作一个资源。
+try-with-resources语句是一个声明一个或多个资源的 try 语句。一个资源作为一个对象，必须在程序结束之后随之关闭。 
+try-with-resources语句确保在语句的最后每个资源都被关闭 。任何实现了 Java.lang.AutoCloseable的对象, 包括所有实现了 java.io.Closeable 的对象, 
+都可以用作一个资源。
 eg:
 static String readFirstLineFromFile(String path) throws IOException {
       try (BufferedReader br = new BufferedReader(new FileReader(path))) {
@@ -22,8 +24,11 @@ static String readFirstLineFromFileWithFinallyBlock(String path) throws IOExcept
 4、每个资源定义具有如下形式：type var = expression;在资源块中不能使用通常的语句。
 5、资源都是隐式final的，也就是说即便没有使用final，这些资源也都是final的。如果尝试为资源变量赋值会得到一个编译期错误。
 5、资源必须是AutoCloseable的子类型，如果不是的话会得到一个编译期错误。
-6、资源关闭的顺序与定义的顺序正好相反。换句话说，在上面的代码示例中，out.close()要先于in.close()得到调用。这么做可以构建嵌套的流，然后从外向内关闭流，这要比按顺序关闭更好(也就是说，可以在底层的流关闭前先清空缓存)。
-7、每个块可以生成n+1个异常，n是资源的数量。这出现在代码主体抛出了异常，然后每个资源关闭语句也都抛出异常的情况下。在这种情况下，代码主体的异常将被抛出，但其他的异常将会被添加到异常的抑制列表(suppressed exception list)中。可以通过getSuppressedExceptions()方法访问这些异常信息。
+6、资源关闭的顺序与定义的顺序正好相反。换句话说，在上面的代码示例中，out.close()要先于in.close()得到调用。
+这么做可以构建嵌套的流，然后从外向内关闭流，这要比按顺序关闭更好(也就是说，可以在底层的流关闭前先清空缓存)。
+7、每个块可以生成n+1个异常，n是资源的数量。这出现在代码主体抛出了异常，然后每个资源关闭语句也都抛出异常的情况下。在这种情况下，代码主体的异常将被抛出，
+但其他的异常将会被添加到异常的抑制列表(suppressed exception list)中。可以通过getSuppressedExceptions()方法访问这些异常信息。
 8、异常堆栈追踪信息可以带有Suppressed前缀：在这些情况下，序列化的Throwable格式也有所不同(如果Java 6客户端调用了远程Java 7运行时中的服务会出现这个问题，反之亦然)。
-9、一个 try-with-resources 语句可以像普通的 try 语句那样有 catch 和 finally 块。在try-with-resources 语句中, 任意的 catch 或者 finally 块都是在声明的资源被关闭以后才运行。
+9、一个 try-with-resources 语句可以像普通的 try 语句那样有 catch 和 finally 块。在try-with-resources 语句中, 
+任意的 catch 或者 finally 块都是在声明的资源被关闭以后才运行。
 
